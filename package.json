@@ -1,0 +1,28 @@
+{
+  "name": "clone-tabnews",
+  "version": "1.0.0",
+  "description": "Novo estudo de desenvolvimento com o dev Deschamps",
+  "homepage": "https://github.com/Eliothluy/clone-tabnews#readme",
+  "bugs": {
+    "url": "https://github.com/Eliothluy/clone-tabnews/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eliothluy/clone-tabnews.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  }
+}
