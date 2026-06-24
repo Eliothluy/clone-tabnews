@@ -3,12 +3,21 @@ import { motion } from "framer-motion";
 import { DayCard } from "./DayCard";
 import { DAYS, MILESTONES } from "../data/days";
 
-export function DayGrid({ unlockedDay, justChecked, isChecked, toggleDay }) {
+export function DayGrid({
+  unlockedDay,
+  justCheckedDay,
+  isVideoCompleted,
+  isDayCompleted,
+  areAllVideosCompleted,
+  toggleVideo,
+  completeDay,
+  uncompleteDay,
+}) {
   const [filter, setFilter] = useState("all");
 
   const filteredDays = DAYS.filter((day) => {
-    if (filter === "done") return isChecked(day.day);
-    if (filter === "pending") return !isChecked(day.day);
+    if (filter === "done") return isDayCompleted(day.day);
+    if (filter === "pending") return !isDayCompleted(day.day);
     return true;
   });
 
@@ -66,10 +75,14 @@ export function DayGrid({ unlockedDay, justChecked, isChecked, toggleDay }) {
               )}
               <DayCard
                 day={day}
-                checked={isChecked(day.day)}
-                justChecked={justChecked === day.day}
-                onToggle={toggleDay}
-                disabled={day.day > unlockedDay && !isChecked(day.day)}
+                completed={isDayCompleted(day.day)}
+                justChecked={justCheckedDay === day.day}
+                isVideoCompleted={isVideoCompleted}
+                areAllVideosCompleted={areAllVideosCompleted(day.day)}
+                toggleVideo={toggleVideo}
+                completeDay={completeDay}
+                uncompleteDay={uncompleteDay}
+                disabled={day.day > unlockedDay && !isDayCompleted(day.day)}
               />
             </div>
           );

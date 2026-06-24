@@ -8,7 +8,7 @@ import { DAYS } from "./data/days";
 
 function App() {
   const {
-    checked,
+    completedDays,
     totalXP,
     currentLevel,
     nextLevel,
@@ -16,9 +16,13 @@ function App() {
     streak,
     completion,
     unlockedDay,
-    justChecked,
-    isChecked,
-    toggleDay,
+    justCheckedDay,
+    isVideoCompleted,
+    isDayCompleted,
+    areAllVideosCompleted,
+    toggleVideo,
+    completeDay,
+    uncompleteDay,
     resetProgress,
   } = useProgress();
 
@@ -38,16 +42,20 @@ function App() {
           <Stats
             streak={streak}
             completion={completion}
-            checkedCount={checked.length}
+            checkedCount={completedDays.length}
             totalDays={DAYS.length}
           />
         </section>
 
         <DayGrid
           unlockedDay={unlockedDay}
-          justChecked={justChecked}
-          isChecked={isChecked}
-          toggleDay={toggleDay}
+          justCheckedDay={justCheckedDay}
+          isVideoCompleted={isVideoCompleted}
+          isDayCompleted={isDayCompleted}
+          areAllVideosCompleted={areAllVideosCompleted}
+          toggleVideo={toggleVideo}
+          completeDay={completeDay}
+          uncompleteDay={uncompleteDay}
         />
       </main>
 

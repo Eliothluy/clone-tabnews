@@ -1,34 +1,53 @@
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Lock, Star } from "lucide-react";
+import { Check, Lock, Star, Circle, CheckCircle2 } from "lucide-react";
 
-export function DayCard({ day, checked, justChecked, onToggle, disabled }) {
+export function DayCard({
+  day,
+  completed,
+  justChecked,
+  isVideoCompleted,
+  areAllVideosCompleted,
+  toggleVideo,
+  completeDay,
+  uncompleteDay,
+  disabled,
+}) {
   const isBoss = day.xp >= 200;
   const isSpecial = day.xp >= 150;
+
+  const completedCount = useMemo(
+    () => day.videos.filter((v) => isVideoCompleted(v.id)).length,
+    [day.videos, isVideoCompleted],
+  );
+
+  const allCompleted = areAllVideosCompleted;
+  const canComplete = allCompleted && !completed && !disabled;
+
+  const handleDayToggle = () => {
+    if (disabled) return;
+    if (completed) {
+      uncompleteDay(day.day);
+    } else if (canComplete) {
+      completeDay(day.day);
+    }
+  };
 
   return (
     <motion.article
       layout
-      className={`day-card ${checked ? "checked" : ""} ${disabled ? "locked" : ""} ${
+      className={`day-card ${completed ? "checked" : ""} ${disabled ? "locked" : ""} ${
         isBoss ? "boss" : ""
       } ${justChecked ? "pulse" : ""}`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={disabled ? {} : { y: -4, scale: 1.02 }}
-      whileTap={disabled ? {} : { scale: 0.98 }}
       transition={{ type: "spring", stiffness: 250, damping: 18 }}
     >
-      <button
-        type="button"
-        className="day-button"
-        onClick={() => onToggle(day.day)}
-        disabled={disabled}
-        aria-pressed={checked}
-        aria-label={`Dia ${day.day}: ${day.title}`}
-      >
+      <div className="day-card-header">
         <div className="day-badge">
           {disabled ? (
             <Lock size={14} />
-          ) : checked ? (
+          ) : completed ? (
             <Check size={16} strokeWidth={3} />
           ) : (
             <span className="day-number">{day.day}</span>
@@ -44,7 +63,60 @@ export function DayCard({ day, checked, justChecked, onToggle, disabled }) {
           {isSpecial && <Star size={12} className="xp-star" />}
           <span>+{day.xp} XP</span>
         </div>
-      </button>
+      </div>
+
+      <div className="day-videos">
+        {day.videos.map((video) => {
+          const checked = isVideoCompleted(video.id);
+          return (
+            <label
+              key={video.id}
+              className={`video-row ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={() => toggleVideo(day.day, video.id)}
+                aria-label={`${video.title} — +${video.xp} XP`}
+              />
+              <span className="video-check">
+                {checked ? (
+                  <CheckCircle2 size={16} />
+                ) : (
+                  <Circle size={16} />
+                )}
+              </span>
+              <span className="video-title">{video.title}</span>
+              <span className="video-xp">+{video.xp} XP</span>
+            </label>
+          );
+        })}
+      </div>
+
+      <div className="day-footer">
+        <span className="day-progress">
+          {completed
+            ? "Dia completo!"
+            : `${completedCount}/${day.videos.length} vídeos assistidos`}
+        </span>
+
+        <button
+          type="button"
+          className={`day-complete-button ${completed ? "completed" : ""} ${canComplete ? "ready" : ""}`}
+          onClick={handleDayToggle}
+          disabled={!completed && !canComplete}
+          aria-pressed={completed}
+        >
+          {completed ? (
+            <>
+              <Check size={14} strokeWidth={3} /> Dia completo
+            </>
+          ) : (
+            `Completar dia (+${day.dayBonusXp} XP)`
+          )}
+        </button>
+      </div>
 
       <AnimatePresence>
         {justChecked && (
@@ -56,7 +128,7 @@ export function DayCard({ day, checked, justChecked, onToggle, disabled }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            +{day.xp} XP
+            +{day.dayBonusXp} XP
           </motion.span>
         )}
       </AnimatePresence>

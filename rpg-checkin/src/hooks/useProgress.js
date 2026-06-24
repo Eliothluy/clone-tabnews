@@ -1,49 +1,125 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { DAYS, LEVELS } from "../data/days";
 
-const STORAGE_KEY = "rpg-checkin-progress-v1";
+const STORAGE_KEY = "rpg-checkin-progress-v2";
 
-function loadChecked() {
+function getAllVideoIdsForDay(dayNumber) {
+  const day = DAYS.find((d) => d.day === dayNumber);
+  return day ? day.videos.map((v) => v.id) : [];
+}
+
+function migrateV1(saved) {
+  if (!saved || !Array.isArray(saved.checked)) return null;
+
+  const completedDays = [...saved.checked].sort((a, b) => a - b);
+  const completedVideos = completedDays.flatMap(getAllVideoIdsForDay);
+
+  return { completedVideos, completedDays };
+}
+
+function loadProgress() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
+    if (!raw) {
+      const legacyRaw = localStorage.getItem("rpg-checkin-progress-v1");
+      if (legacyRaw) {
+        const legacy = JSON.parse(legacyRaw);
+        const migrated = migrateV1(legacy);
+        if (migrated) return migrated;
+      }
+      return { completedVideos: [], completedDays: [] };
+    }
+
     const saved = JSON.parse(raw);
-    if (saved && Array.isArray(saved.checked)) return saved.checked;
-    return [];
+    if (
+      saved &&
+      Array.isArray(saved.completedVideos) &&
+      Array.isArray(saved.completedDays)
+    ) {
+      return {
+        completedVideos: saved.completedVideos,
+        completedDays: saved.completedDays,
+      };
+    }
+
+    return { completedVideos: [], completedDays: [] };
   } catch {
-    return [];
+    return { completedVideos: [], completedDays: [] };
   }
 }
 
-function saveProgress(checked) {
+function saveProgress(completedVideos, completedDays) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ checked }));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ completedVideos, completedDays }),
+    );
   } catch {
     // ignore
   }
 }
 
 export function useProgress() {
-  const [checked, setChecked] = useState(() => loadChecked());
-  const [justChecked, setJustChecked] = useState(null);
+  const [completedVideos, setCompletedVideos] = useState(
+    () => loadProgress().completedVideos,
+  );
+  const [completedDays, setCompletedDays] = useState(
+    () => loadProgress().completedDays,
+  );
+  const [justCheckedDay, setJustCheckedDay] = useState(null);
 
   useEffect(() => {
-    saveProgress(checked);
-  }, [checked]);
+    saveProgress(completedVideos, completedDays);
+  }, [completedVideos, completedDays]);
 
-  // `unlockedDay` é derivado de `checked` — não há motivo para ser estado
-  // independente (e correr risco de dessincronia com o que está salvo).
-  const unlockedDay = useMemo(
-    () => (checked.length ? Math.max(...checked) + 1 : 1),
-    [checked]
+  const isVideoCompleted = useCallback(
+    (videoId) => completedVideos.includes(videoId),
+    [completedVideos],
   );
 
-  const totalXP = useMemo(() => {
-    return checked.reduce((sum, dayNumber) => {
+  const isDayCompleted = useCallback(
+    (dayNumber) => completedDays.includes(dayNumber),
+    [completedDays],
+  );
+
+  const getCompletedVideosForDay = useCallback(
+    (dayNumber) => {
       const day = DAYS.find((d) => d.day === dayNumber);
-      return sum + (day?.xp ?? 100);
+      if (!day) return [];
+      return day.videos.filter((v) => completedVideos.includes(v.id));
+    },
+    [completedVideos],
+  );
+
+  const areAllVideosCompleted = useCallback(
+    (dayNumber) => {
+      const day = DAYS.find((d) => d.day === dayNumber);
+      if (!day) return false;
+      return day.videos.every((v) => completedVideos.includes(v.id));
+    },
+    [completedVideos],
+  );
+
+  const unlockedDay = useMemo(() => {
+    return completedDays.length ? Math.max(...completedDays) + 1 : 1;
+  }, [completedDays]);
+
+  const totalXP = useMemo(() => {
+    const videosXP = completedVideos.reduce((sum, videoId) => {
+      for (const day of DAYS) {
+        const video = day.videos.find((v) => v.id === videoId);
+        if (video) return sum + video.xp;
+      }
+      return sum;
     }, 0);
-  }, [checked]);
+
+    const daysBonusXP = completedDays.reduce((sum, dayNumber) => {
+      const day = DAYS.find((d) => d.day === dayNumber);
+      return sum + (day?.dayBonusXp ?? 0);
+    }, 0);
+
+    return videosXP + daysBonusXP;
+  }, [completedVideos, completedDays]);
 
   const { currentLevel, nextLevel, progressToNext } = useMemo(() => {
     let current = LEVELS[0];
@@ -65,15 +141,12 @@ export function useProgress() {
     const earned = totalXP - current.xp;
     const progressToNext = Math.min(100, Math.max(0, (earned / range) * 100));
 
-    // `nextLevel` deve ser explícito: como shorthand, ele resolveria para a
-    // const `nextLevel` do escopo externo, que ainda está no TDZ neste momento
-    // (o useMemo executa o callback durante a própria inicialização dela).
     return { currentLevel: current, nextLevel: next, progressToNext };
   }, [totalXP]);
 
   const streak = useMemo(() => {
-    if (checked.length === 0) return 0;
-    const sorted = [...checked].sort((a, b) => a - b);
+    if (completedDays.length === 0) return 0;
+    const sorted = [...completedDays].sort((a, b) => a - b);
     let streakCount = 1;
     for (let i = sorted.length - 1; i > 0; i--) {
       if (sorted[i] - sorted[i - 1] === 1) {
@@ -83,45 +156,58 @@ export function useProgress() {
       }
     }
     return streakCount;
-  }, [checked]);
+  }, [completedDays]);
 
   const completion = useMemo(() => {
-    return Math.round((checked.length / DAYS.length) * 100);
-  }, [checked]);
+    return Math.round((completedDays.length / DAYS.length) * 100);
+  }, [completedDays]);
 
-  const isChecked = useCallback(
-    (dayNumber) => checked.includes(dayNumber),
-    [checked]
-  );
+  const toggleVideo = useCallback(
+    (dayNumber, videoId) => {
+      setCompletedVideos((prev) => {
+        const next = prev.includes(videoId)
+          ? prev.filter((id) => id !== videoId)
+          : [...prev, videoId].sort();
+        return next;
+      });
 
-  // Side effects (setJustChecked + setTimeout) ficam fora do updater do
-  // setChecked — updaters devem ser puros; aninhá-los faz o React dispará-los
-  // duas vezes em StrictMode (dev) e vaza o timer do setTimeout.
-  const toggleDay = useCallback(
-    (dayNumber) => {
-      const isCurrentlyChecked = checked.includes(dayNumber);
-      const next = isCurrentlyChecked
-        ? checked.filter((d) => d !== dayNumber)
-        : [...checked, dayNumber].sort((a, b) => a - b);
-      setChecked(next);
-
-      if (!isCurrentlyChecked) {
-        setJustChecked(dayNumber);
-        setTimeout(() => setJustChecked(null), 1200);
-      }
+      // Se desmarcar um vídeo, o dia deixa de estar completo.
+      setCompletedDays((prev) => {
+        if (prev.includes(dayNumber)) {
+          return prev.filter((d) => d !== dayNumber).sort((a, b) => a - b);
+        }
+        return prev;
+      });
     },
-    [checked]
+    [],
   );
+
+  const completeDay = useCallback((dayNumber) => {
+    setCompletedDays((prev) => {
+      if (prev.includes(dayNumber)) return prev;
+      return [...prev, dayNumber].sort((a, b) => a - b);
+    });
+    setJustCheckedDay(dayNumber);
+    setTimeout(() => setJustCheckedDay(null), 1200);
+  }, []);
+
+  const uncompleteDay = useCallback((dayNumber) => {
+    setCompletedDays((prev) =>
+      prev.filter((d) => d !== dayNumber).sort((a, b) => a - b),
+    );
+  }, []);
 
   const resetProgress = useCallback(() => {
     if (window.confirm("Tem certeza que deseja reiniciar toda a jornada?")) {
-      setChecked([]);
-      setJustChecked(null);
+      setCompletedVideos([]);
+      setCompletedDays([]);
+      setJustCheckedDay(null);
     }
   }, []);
 
   return {
-    checked,
+    completedVideos,
+    completedDays,
     totalXP,
     currentLevel,
     nextLevel,
@@ -129,9 +215,14 @@ export function useProgress() {
     streak,
     completion,
     unlockedDay,
-    justChecked,
-    isChecked,
-    toggleDay,
+    justCheckedDay,
+    isVideoCompleted,
+    isDayCompleted,
+    getCompletedVideosForDay,
+    areAllVideosCompleted,
+    toggleVideo,
+    completeDay,
+    uncompleteDay,
     resetProgress,
   };
 }

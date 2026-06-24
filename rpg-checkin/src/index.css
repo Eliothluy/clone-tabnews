@@ -370,6 +370,7 @@ button {
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 16px 18px;
 }
 
 .day-card:hover {
@@ -401,17 +402,11 @@ button {
   box-shadow: 0 0 22px var(--ruby-glow);
 }
 
-.day-button {
-  width: 100%;
+.day-card-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 16px;
-  padding: 16px 18px;
-  background: transparent;
-  border: none;
-  color: inherit;
-  text-align: left;
 }
 
 .day-badge {
@@ -496,6 +491,155 @@ button {
   filter: drop-shadow(0 0 4px var(--gold-glow));
 }
 
+/* Videos */
+.day-videos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.video-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.video-row:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+}
+
+.video-row.checked {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: var(--emerald-soft);
+}
+
+.video-row.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.video-row input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.video-check {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-row.checked .video-check {
+  color: var(--emerald);
+}
+
+.video-title {
+  font-size: 0.95rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-row.checked .video-title {
+  color: var(--emerald);
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.video-xp {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Day Footer */
+.day-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.day-progress {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.day-card.checked .day-progress {
+  color: var(--emerald);
+  font-weight: 600;
+}
+
+.day-complete-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.day-complete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.day-complete-button.ready {
+  background: linear-gradient(135deg, var(--emerald-soft), var(--emerald));
+  color: var(--bg);
+  border-color: var(--emerald);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--emerald-glow);
+}
+
+.day-complete-button.ready:hover {
+  box-shadow: 0 0 20px var(--emerald-glow);
+}
+
+.day-complete-button.completed {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--emerald);
+  border-color: var(--emerald);
+  cursor: pointer;
+}
+
+.day-card.boss .day-complete-button.ready {
+  background: linear-gradient(135deg, var(--ruby-soft), var(--ruby));
+  border-color: var(--ruby);
+  box-shadow: 0 0 14px var(--ruby-glow);
+}
+
+.day-card.boss .day-complete-button.completed {
+  background: rgba(230, 57, 70, 0.12);
+  color: var(--ruby);
+  border-color: var(--ruby);
+}
+
 .floating-xp {
   position: absolute;
   top: 12px;
@@ -570,7 +714,7 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .day-button {
+  .day-card-header {
     grid-template-columns: auto 1fr;
     gap: 14px;
   }
@@ -578,6 +722,21 @@ button {
   .day-xp {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .video-row {
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+  }
+
+  .video-xp {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .day-footer {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .day-section-header {

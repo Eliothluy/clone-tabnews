@@ -36,7 +36,7 @@ export function Stats({ streak, completion, checkedCount, totalDays }) {
         <div className="stat-value">
           {checkedCount}/{totalDays}
         </div>
-        <div className="stat-label">Dias checkados</div>
+        <div className="stat-label">Dias completos</div>
       </motion.div>
     </div>
   );
