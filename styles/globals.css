@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+    --color-bg-start: #fff0f5;
+    --color-bg-end: #ffe4e1;
+    --color-card-bg: rgba(255, 255, 255, 0.85);
+    --color-text: #4a3b3b;
+    --color-accent: #d6336c;
+    --color-accent-soft: #ff6b9d;
+    --font-title: 'Dancing Script', cursive;
+    --font-body: 'Inter', sans-serif;
+    --shadow-soft: 0 8px 32px rgba(214, 51, 108, 0.15);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#__next {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background: linear-gradient(135deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
