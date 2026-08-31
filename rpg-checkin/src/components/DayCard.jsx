@@ -81,11 +81,7 @@ export function DayCard({
                 aria-label={`${video.title} — +${video.xp} XP`}
               />
               <span className="video-check">
-                {checked ? (
-                  <CheckCircle2 size={16} />
-                ) : (
-                  <Circle size={16} />
-                )}
+                {checked ? <CheckCircle2 size={16} /> : <Circle size={16} />}
               </span>
               <span className="video-title">{video.title}</span>
               <span className="video-xp">+{video.xp} XP</span>

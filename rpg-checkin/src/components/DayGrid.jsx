@@ -55,8 +55,7 @@ export function DayGrid({
       <div className="day-grid">
         {filteredDays.map((day) => {
           const milestone = currentMilestone(day.day);
-          const showMilestoneHeader =
-            milestone && day.day === milestone.start;
+          const showMilestoneHeader = milestone && day.day === milestone.start;
 
           return (
             <div key={day.day} className="day-wrapper">

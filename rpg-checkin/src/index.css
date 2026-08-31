@@ -55,8 +55,16 @@ body {
   margin: 0;
   min-height: 100svh;
   background:
-    radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.08), transparent 35%),
-    radial-gradient(circle at 90% 100%, rgba(230, 57, 70, 0.07), transparent 35%),
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(212, 175, 55, 0.08),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 90% 100%,
+      rgba(230, 57, 70, 0.07),
+      transparent 35%
+    ),
     var(--bg);
 }
 
@@ -79,8 +87,16 @@ body {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.06), transparent 50%),
-    radial-gradient(circle at 50% 110%, rgba(230, 57, 70, 0.05), transparent 40%);
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(212, 175, 55, 0.06),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 110%,
+      rgba(230, 57, 70, 0.05),
+      transparent 40%
+    );
   z-index: 0;
 }
 
@@ -93,7 +109,9 @@ body {
   padding: 40px 24px 80px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--display);
   margin: 0;
   letter-spacing: 0.02em;
@@ -158,9 +176,19 @@ button {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, var(--gold-glow), transparent 40%, transparent 60%, var(--ruby-glow));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  background: linear-gradient(
+    135deg,
+    var(--gold-glow),
+    transparent 40%,
+    transparent 60%,
+    var(--ruby-glow)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -235,7 +263,10 @@ button {
   border-radius: var(--radius-md);
   padding: 16px;
   text-align: center;
-  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .stat-card:hover {
@@ -353,7 +384,12 @@ button {
 .milestone-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-light),
+    transparent
+  );
 }
 
 .milestone-name {
@@ -369,7 +405,9 @@ button {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   padding: 16px 18px;
 }
 
@@ -378,7 +416,11 @@ button {
 }
 
 .day-card.checked {
-  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08), var(--bg-elevated));
+  background: linear-gradient(
+    135deg,
+    rgba(46, 204, 113, 0.08),
+    var(--bg-elevated)
+  );
   border-color: var(--emerald-soft);
   box-shadow: 0 0 18px var(--emerald-glow);
 }
@@ -397,7 +439,11 @@ button {
 }
 
 .day-card.boss.checked {
-  background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), var(--bg-elevated));
+  background: linear-gradient(
+    135deg,
+    rgba(230, 57, 70, 0.1),
+    var(--bg-elevated)
+  );
   border-color: var(--ruby);
   box-shadow: 0 0 22px var(--ruby-glow);
 }
@@ -511,7 +557,9 @@ button {
   background: rgba(0, 0, 0, 0.15);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 .video-row:hover {
@@ -691,9 +739,15 @@ button {
 
 /* Pulse animation on just checked */
 @keyframes card-pulse {
-  0% { box-shadow: 0 0 0 0 var(--gold-glow); }
-  70% { box-shadow: 0 0 0 12px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0% {
+    box-shadow: 0 0 0 0 var(--gold-glow);
+  }
+  70% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 .day-card.pulse {

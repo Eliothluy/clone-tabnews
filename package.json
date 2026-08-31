@@ -14,7 +14,10 @@
   "author": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"
+    "dev": "next dev",
+    "lint": "prettier --write .",
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write . --fix"
   },
   "dependencies": {
     "next": "^16.2.9",
@@ -23,5 +26,8 @@
   },
   "overrides": {
     "postcss": "^8.5.10"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
   }
 }

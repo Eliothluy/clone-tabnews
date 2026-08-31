@@ -162,25 +162,22 @@ export function useProgress() {
     return Math.round((completedDays.length / DAYS.length) * 100);
   }, [completedDays]);
 
-  const toggleVideo = useCallback(
-    (dayNumber, videoId) => {
-      setCompletedVideos((prev) => {
-        const next = prev.includes(videoId)
-          ? prev.filter((id) => id !== videoId)
-          : [...prev, videoId].sort();
-        return next;
-      });
+  const toggleVideo = useCallback((dayNumber, videoId) => {
+    setCompletedVideos((prev) => {
+      const next = prev.includes(videoId)
+        ? prev.filter((id) => id !== videoId)
+        : [...prev, videoId].sort();
+      return next;
+    });
 
-      // Se desmarcar um vídeo, o dia deixa de estar completo.
-      setCompletedDays((prev) => {
-        if (prev.includes(dayNumber)) {
-          return prev.filter((d) => d !== dayNumber).sort((a, b) => a - b);
-        }
-        return prev;
-      });
-    },
-    [],
-  );
+    // Se desmarcar um vídeo, o dia deixa de estar completo.
+    setCompletedDays((prev) => {
+      if (prev.includes(dayNumber)) {
+        return prev.filter((d) => d !== dayNumber).sort((a, b) => a - b);
+      }
+      return prev;
+    });
+  }, []);
 
   const completeDay = useCallback((dayNumber) => {
     setCompletedDays((prev) => {

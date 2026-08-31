@@ -717,10 +717,7 @@ export const DAYS = [
     "Momento de consolidar o que foi aprendido antes do encerramento.",
     2,
     100,
-    [
-      "52.1 - Pista Rápida Dia 52",
-      "52.2 - Revisão dos principais conceitos",
-    ],
+    ["52.1 - Pista Rápida Dia 52", "52.2 - Revisão dos principais conceitos"],
   ),
   buildDay(
     53,
