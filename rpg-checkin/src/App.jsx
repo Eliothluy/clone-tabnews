@@ -1,4 +1,5 @@
 import { Header } from "./components/Header";
+import { HeroCharacter } from "./components/HeroCharacter";
 import { ProgressBar } from "./components/ProgressBar";
 import { Stats } from "./components/Stats";
 import { DayGrid } from "./components/DayGrid";
@@ -33,18 +34,23 @@ function App() {
         <Header />
 
         <section className="hero-panel">
-          <ProgressBar
-            currentLevel={currentLevel}
-            nextLevel={nextLevel}
-            progressToNext={progressToNext}
-            totalXP={totalXP}
-          />
-          <Stats
-            streak={streak}
-            completion={completion}
-            checkedCount={completedDays.length}
-            totalDays={DAYS.length}
-          />
+          <div className="hero-layout">
+            <HeroCharacter level={currentLevel.level} />
+            <div className="hero-info">
+              <ProgressBar
+                currentLevel={currentLevel}
+                nextLevel={nextLevel}
+                progressToNext={progressToNext}
+                totalXP={totalXP}
+              />
+              <Stats
+                streak={streak}
+                completion={completion}
+                checkedCount={completedDays.length}
+                totalDays={DAYS.length}
+              />
+            </div>
+          </div>
         </section>
 
         <DayGrid

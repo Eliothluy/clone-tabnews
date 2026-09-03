@@ -35,6 +35,7 @@ npm run lint       # ESLint only — no tests exist in this package
 - Entry point: `src/main.jsx` mounts `App.jsx` into `index.html#root` under React `StrictMode`.
 - Content source of truth: `src/data/days.js` — 53 daily entries, milestones, XP values, and `LEVELS` thresholds.
 - State & persistence: `src/hooks/useProgress.js` — XP/level/streak/computation and `localStorage` save/load.
-- `src/components/` — UI components (`Header`, `ProgressBar`, `Stats`, `DayGrid`, `Footer`).
+- `src/components/` — UI components (`Header`, `HeroCharacter`, `ProgressBar`, `Stats`, `DayGrid`, `Footer`).
+- Hero pixel character: `src/data/character.js` holds layered pixel-art sprite data (character grids + per-level `LEVEL_STAGES`); `PixelSprite.jsx` renders a grid as SVG and `HeroCharacter.jsx` composes the layers for the current level (idle bob, aura tiers, level-up celebration). Visuals are derived from `currentLevel.level` — nothing extra is persisted.
 - `localStorage` key: `rpg-checkin-progress-v2`. The app auto-migrates legacy data from `rpg-checkin-progress-v1`. Clearing either key resets user progress.
 - `index.html` loads Google Fonts (Cinzel, JetBrains Mono, Crimson Pro) and sets `lang="pt-BR"`; UI copy is Portuguese.
