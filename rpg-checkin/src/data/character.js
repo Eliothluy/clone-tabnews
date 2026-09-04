@@ -8,14 +8,15 @@ export const GRID_H = 27;
 // Paleta base (letra -> cor). "b"/"B"/"L" (hoodie) são sobrescritos por nível.
 export const PALETTE = {
   k: "#17141f", // contorno/escuro
-  s: "#f2c79b", // pele
-  S: "#e0a878", // sombra da pele / bochechas
-  h: "#4a3222", // cabelo
-  H: "#6b4a30", // brilho do cabelo
+  s: "#e9b489", // pele
+  S: "#d19a6e", // sombra da pele
+  h: "#2a1c14", // cabelo escuro cacheado
+  H: "#43301f", // brilho do cabelo
   e: "#201d2b", // olhos
   w: "#f8f8ff", // brilho do olho
   m: "#c96f5e", // boca
-  n: "#9a93ad", // camiseta cinza (nível 1)
+  n: "#262230", // camiseta preta (nível 1)
+  y: "#d7dce8", // lente clara dos óculos
   p: "#46425a", // calça
   P: "#343048", // sombra da calça
   o: "#2a2635", // sapatos
@@ -53,23 +54,32 @@ export const LAYERS = {
     ".......ssssssssss.......",
     "........ssSSSSss........",
   ]),
-  hair: makeLayer(2, [
+  hair: makeLayer(1, [
+    ".........h.h.hh.........",
     "........hhhhhhhh........",
     ".......hhhhhhhhhh.......",
     "......hhhhhhhhhhhh......",
     "......hHHhhhhhhHHh......",
     "......hhhhhhhhhhhh......",
-    "......hh..........hh....",
-    "......hh..........hh....",
+    "......hh........hh......",
+    "......hh........hh......",
   ]),
   face: makeLayer(7, [
     "........................",
     "........ew....ew........",
-    ".......SS..mm..SS.......",
+    "...........mm...........",
   ]),
+  // Óculos redondos de armação escura com lente clara (estilo do herói).
   glasses: makeLayer(7, [
-    "......kkkkkkkkkkkk......",
-    "......kccckkkkccck......",
+    ".......kkk....kkk.......",
+    "......kyyykkkkyyyk......",
+    ".......kkk....kkk.......",
+  ]),
+  // Bigode + cavanhaque no tom do cabelo.
+  facial: makeLayer(9, [
+    "..........h..h..........",
+    "..........hhhh..........",
+    "...........hh...........",
   ]),
   headset: makeLayer(2, [
     "........kkkkkkkk........",
@@ -170,29 +180,31 @@ export function composeLayers(layerNames) {
 // equipamentos aparecem conforme o dev sobe de patente.
 export const LEVEL_STAGES = {
   1: {
-    layers: ["skin", "hair", "face", "tee", "legs"],
+    layers: ["skin", "hair", "glasses", "face", "facial", "tee", "legs"],
     quote: "Toda lenda começa com um simples git init…",
   },
   2: {
-    layers: ["skin", "hair", "glasses", "face", "hoodie", "legs"],
+    layers: ["skin", "hair", "glasses", "face", "facial", "hoodie", "legs"],
     hoodie: { b: "#4a7dc9", B: "#3a639f", L: "#7fa5e0" },
-    quote: "Óculos colocados: modo dev ativado!",
+    quote: "Primeiro hoodie desbloqueado: modo dev ativado!",
   },
   3: {
-    layers: ["skin", "hair", "glasses", "face", "hoodie", "legs", "laptop"],
+    layers: ["skin", "hair", "glasses", "face", "facial", "hoodie", "legs", "laptop"],
     hoodie: { b: "#2fb3a8", B: "#238a82", L: "#66d0c7" },
     quote: "Laptop na mão: hora das primeiras linhas de código.",
   },
   4: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
     ],
     hoodie: { b: "#7a5fd0", B: "#5f49a8", L: "#a08ae0" },
     quote: "Headset no pescoço: bem-vindo ao modo foco absoluto.",
   },
   5: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee",
     ],
     hoodie: { b: "#2ecc71", B: "#22a258", L: "#74e39f" },
@@ -200,7 +212,8 @@ export const LEVEL_STAGES = {
   },
   6: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee", "keyboard",
     ],
     hoodie: { b: "#e63946", B: "#b52b37", L: "#ff7d87" },
@@ -208,7 +221,8 @@ export const LEVEL_STAGES = {
   },
   7: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee", "keyboard", "diagram",
     ],
     hoodie: { b: "#5d5fef", B: "#4749bd", L: "#8f90ff" },
@@ -216,7 +230,8 @@ export const LEVEL_STAGES = {
   },
   8: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee", "keyboard", "glyphs",
     ],
     hoodie: { b: "#8b2fd6", B: "#6c22a8", L: "#b26ae8" },
@@ -225,7 +240,8 @@ export const LEVEL_STAGES = {
   },
   9: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee", "terminal", "glyphs",
     ],
     hoodie: { b: "#d63384", B: "#a82567", L: "#ea6fae" },
@@ -234,7 +250,8 @@ export const LEVEL_STAGES = {
   },
   10: {
     layers: [
-      "skin", "hair", "glasses", "face", "headset", "hoodie", "legs", "laptop",
+      "skin", "hair", "glasses", "face", "facial", "headset", "hoodie", "legs",
+      "laptop",
       "coffee", "terminal", "glyphs", "crown",
     ],
     hoodie: { b: "#d4af37", B: "#a8872a", L: "#f0d878" },
